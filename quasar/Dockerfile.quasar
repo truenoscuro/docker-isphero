@@ -1,0 +1,8 @@
+FROM node:latest as quasar
+WORKDIR /quasar
+COPY api .
+RUN npm i -g @quasar/cli
+RUN npm install && quasar build
+
+FROM php:8-apache
+COPY --from=quasar /quasar/dist/spa /var/www/html

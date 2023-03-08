@@ -1,0 +1,69 @@
+version: '3'
+
+services:
+  #Principal Apache2
+  apache2:
+    build:
+      context: ./apache2
+      dockerfile: Dockerfile.Apache2
+    expose:
+      - "80"
+    ports:
+      - "80:80"
+  # database
+  database:
+      build:
+        context: ./database
+        dockerfile: Dockerfile.Database
+      environment:
+        - MYSQL_ROOT_PASSWORD=${PASSWORD}
+        - MYSQL_DATABASE=${DATABASE}
+      volumes:
+        - db-volume:/var/lib/mysql
+      expose:
+        - "3306"
+      ports:
+        - "3306:3306"
+  
+  # Tomcat
+  tomcat:
+    build:
+      context: ./tomcat
+      dockerfile: Dockerfile.Tomcat
+    expose:
+      - "81"
+    ports:
+      - "81:8080"
+    env_file:
+      - .env
+
+
+  # Laravel
+  laravel:
+    build:
+      context: ./laravel
+      dockerfile: Dockerfile.Laravel
+    expose:
+      - "82"
+    ports:
+      - "82:80"
+    env_file:
+      - .env
+
+  # Quasar
+  quasarapache2:
+    build:
+      context: ./quasar
+      dockerfile: Dockerfile.quasar  
+    expose:
+      - "83"
+    ports:
+      - "83:80"
+    env_file:
+      - .env
+    
+#Volume database
+volumes:
+  db-volume:
+
+

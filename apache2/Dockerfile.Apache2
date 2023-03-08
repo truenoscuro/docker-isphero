@@ -1,0 +1,13 @@
+FROM php:8-apache
+# Conf apache2
+COPY ./apache2.conf  /etc/apache2/
+COPY ./sites/* /etc/apache2/sites-available/
+RUN a2enmod rewrite proxy proxy_http
+RUN a2ensite tomcat.conf api.conf admin.conf
+# Install CERBOT
+# RUN a2ensites llocs
+RUN service apache2 restart
+
+
+
+

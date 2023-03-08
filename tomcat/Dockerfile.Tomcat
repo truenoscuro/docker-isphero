@@ -1,0 +1,7 @@
+FROM tomcat:latest
+
+COPY ./wars/* $CATALINA_HOME/webapps 
+COPY ./application.properties /home
+
+CMD [ "catalina.sh","run"]
+

@@ -1,0 +1,18 @@
+FROM php:8-apache
+RUN apt-get update && apt-get upgrade -y
+# Conf apache2
+COPY ./apache2.conf /etc/apache2/
+COPY ./000-default.conf /etc/apache2/sites-available
+RUN a2enmod rewrite.load
+
+RUN docker-php-ext-install pdo pdo_mysql && docker-php-ext-enable pdo pdo_mysql
+COPY --from=composer /usr/bin/composer /usr/bin/composer
+# INstall dependencies
+COPY ./api /var/www/html
+WORKDIR /var/www/html
+RUN apt-get install -y git && apt-get install -y zip
+RUN composer update && composer install
+RUN chmod 777 ./storage -R
+
+
+RUN service apache2 restart
